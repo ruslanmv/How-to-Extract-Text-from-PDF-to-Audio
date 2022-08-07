@@ -281,7 +281,5 @@ IPython.display.Audio("audio2.mp3")
     Your browser does not support the audio element.
 </audio>
 
-
-
 **Congratulations!** You have converted a PDF to text and converted to mp3.
 
