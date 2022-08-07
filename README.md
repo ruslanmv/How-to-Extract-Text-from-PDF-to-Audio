@@ -96,7 +96,7 @@ You can install the PDFMiner library easily using the pip command.
 pip install pdfminer
 ```
 
-and
+and for the text to audio conversion we will use the following libraries
 
 ```
 pip install gTTS pyttsx3
@@ -135,6 +135,16 @@ After that, create a new  notebook
 Now is time to build the program, once is created the notebook,  copy paste the following code
 
 ```python
+import io 
+from pdfminer.converter import TextConverter 
+from pdfminer.pdfinterp import PDFPageInterpreter 
+from pdfminer.pdfinterp import PDFResourceManager 
+from pdfminer.pdfpage import PDFPage 
+from gtts import gTTS
+import os
+import IPython
+import pyttsx3
+
 def extract_text_by_page(pdf_path): 
 
     with open(pdf_path, 'rb') as fh: 
@@ -169,16 +179,23 @@ def extract_all(pdf_path):
     for page in extract_text_by_page(pdf_path): 
         text=text+page    
     return text   
-
+# Offline convertor
 def pdf_to_mp3_v1(pdf_path): 
     extract_text(pdf_path)
     # The text that you want to convert to audio
     mytext = extract_all(pdf_path)
     # On linux make sure that 'espeak' and 'ffmpeg' are installed
+    # init function to get an engine instance for the speech synthesis
+    engine = pyttsx3.init()
+    # get the available voices 
+    voices = engine.getProperty('voices')
+    # change the speech rate
+    engine.setProperty('rate',178)
+    # choose a voice based on the voice id
+    engine.setProperty('voice',voices[0].id) # Selected  Voice    
     engine.save_to_file(mytext, 'audio1.mp3')
     engine.runAndWait()
-
-
+# Online convertor
 def pdf_to_mp3_v2(pdf_path): 
     extract_text(pdf_path)
     # The text that you want to convert to audio
